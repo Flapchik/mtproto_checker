@@ -182,7 +182,11 @@ class ProxyChecker:
                     ft.Container(
                         content=ft.Row(
                             controls=[
-                                ft.Text(tg_link, size=12, expand=True, selectable=True),
+                                ft.Button(
+                                    content="Применить",
+                                    expand=True,
+                                    action=ft.OpenUrl(url=tg_link, target=ft.UrlTarget.BLANK),
+                                ),
                                 ft.IconButton(
                                     icon=ft.Icons.CONTENT_COPY,
                                     data=tg_link,
@@ -204,6 +208,7 @@ class ProxyChecker:
                             ],
                             alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
                             vertical_alignment=ft.CrossAxisAlignment.CENTER,
+                            spacing=8,
                         ),
                         bgcolor=ft.Colors.with_opacity(0.05, ft.Colors.WHITE),
                         padding=12,

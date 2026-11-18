@@ -275,6 +275,7 @@ class ProxyChecker:
 
 
 def main(page: ft.Page):
+    page.window.icon = "icon.png"
     ProxyChecker(page)
 
 

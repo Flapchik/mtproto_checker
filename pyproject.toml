@@ -9,3 +9,4 @@ dependencies = [
 [tool.flet]
 title = "MTProto Checker"
 bundle_id = "io.github.flapchik.mtproto_checker"
+icon = "icon.png"

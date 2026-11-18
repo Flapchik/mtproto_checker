@@ -1,12 +1,12 @@
-import flet as ft
 import asyncio
-import httpx
-import urllib.parse
 import time
+import urllib.parse
+
+import flet as ft
+import httpx
 
 SOURCE_URL = "https://raw.githubusercontent.com/SoliSpirit/mtproto/refs/heads/master/all_proxies.txt"
 TIMEOUT = 3.0
-CONCURRENCY = 100
 
 
 class ProxyChecker:
@@ -47,6 +47,20 @@ class ProxyChecker:
             style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=10)),
         )
 
+        self.concurrency_label = ft.Text(
+            "Параллельных проверок: 20",
+            size=14,
+            color=ft.Colors.GREY_400,
+        )
+
+        self.slider = ft.Slider(
+            min=1, max=100,
+            value=20,
+            divisions=100,
+            label="{value}",
+            on_change=self.on_slider_change
+        )
+
         root = ft.Column(
             expand=True,
             horizontal_alignment=ft.CrossAxisAlignment.STRETCH,
@@ -69,6 +83,8 @@ class ProxyChecker:
                     alignment=ft.MainAxisAlignment.SPACE_AROUND,
                 ),
                 self.results_list,
+                self.concurrency_label,
+                self.slider,
                 ft.Row(
                     [self.check_btn, self.clear_btn],
                     alignment=ft.MainAxisAlignment.SPACE_EVENLY,
@@ -142,7 +158,9 @@ class ProxyChecker:
             self.status_text.value = f"Проверяем {total} прокси..."
             self.page.update()
 
-            semaphore = asyncio.Semaphore(CONCURRENCY)
+            value = self.slider.value
+            concurrency = int(value) if value is not None else 25
+            semaphore = asyncio.Semaphore(concurrency)
             completed = 0
 
             async def check_and_track(server, port, url):
@@ -226,6 +244,12 @@ class ProxyChecker:
             self.check_btn.disabled = False
             self.check_btn.content = "Проверить прокси"
             self.page.update()
+
+    def on_slider_change(self, e):
+        value = self.slider.value
+        concurrency = int(value) if value is not None else 25
+        self.concurrency_label.value = f"Параллельных проверок: {concurrency}"
+        self.page.update()
 
     async def copy_to_clipboard(self, e):
         link = e.control.data

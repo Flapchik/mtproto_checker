@@ -1,0 +1,11 @@
+[project]
+name = "mtproto-checker"
+version = "1.0.0"
+description = "MTProto Proxy Checker"
+dependencies = [
+    "httpx"
+]
+
+[tool.flet]
+title = "MTProto Checker"
+bundle_id = "io.github.flapchik.mtproto_checker"
